@@ -133,7 +133,7 @@ resource "yandex_iam_service_account_static_access_key" "sa-static-key" {
   service_account_id = yandex_iam_service_account.sa-for-obj-storage.id
 }
 
-# Use keys to create an input bucket and grant permission to Yandex Data Processing service account to read from the bucket
+# Use keys to create an input bucket
 resource "yandex_storage_bucket" "input-bucket" {
   access_key = yandex_iam_service_account_static_access_key.sa-static-key.access_key
   secret_key = yandex_iam_service_account_static_access_key.sa-static-key.secret_key
@@ -143,6 +143,7 @@ resource "yandex_storage_bucket" "input-bucket" {
   ]
 }
 
+# Grant permissions to the service account in order to read from the bucket
 resource "yandex_storage_bucket_grant" "input-bucket-grant" {
   bucket     = yandex_storage_bucket.input-bucket.bucket
   access_key = yandex_iam_service_account_static_access_key.sa-static-key.access_key
@@ -164,6 +165,7 @@ resource "yandex_storage_bucket" "output-bucket" {
   ]
 }
 
+# Grant permissions to the service account in order to read from the bucket and write to it
 resource "yandex_storage_bucket_grant" "output-bucket-grant" {
   bucket     = yandex_storage_bucket.output-bucket.bucket
   access_key = yandex_iam_service_account_static_access_key.sa-static-key.access_key
